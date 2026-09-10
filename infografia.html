@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orange Day - Timeline</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #fce1d0, #e67e22, #8e44ad, #1a0800);
+      color: #ffffff;
+      font-family: sans-serif;
+      height: 12000px;
+      overflow-x: hidden;
+      cursor: url('lazo-normal.png'), auto;
+    }
+
+    a, button, .event-item {
+      cursor: url('lazo-deshecho.png'), pointer;
+    }
+
+    .year-tracker {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 5rem;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #ffffff;
+      color: #d35400;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      z-index: 100;
+    }
+
+    .event-item {
+      position: absolute;
+      text-align: center;
+      width: 280px;
+      transition: transform 0.3s;
+      z-index: 20;
+    }
+
+    .event-item:hover {
+      transform: scale(1.1);
+    }
+
+    .event-item img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .event-title {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background-color: #22222e;
+      border: 2px solid #e67e22;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      padding: 30px;
+      position: relative;
+      text-align: left;
+      box-shadow: 0 0 30px #e67e22;
+    }
+
+    .modal-content h2 {
+      color: #e67e22;
+      margin-top: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← Volver al inicio</a>
+  
+  <div class="year-tracker" id="year-display">1960</div>
+
+  <div class="event-item" style="top: 300px; left: 15%;" onclick="openModal('1960 - The Mirabal Sisters', 'On November 25, 1960, the Mirabal sisters were assassinated in the Dominican Republic. Activists had protested for years against the dictatorship before this tragedy occurred. Their legacy sparked the global movement.')">
+    <img src="img_1960.png" alt="Mirabal Sisters">
+    <div class="event-title">The Mirabal Sisters</div>
+  </div>
+
+  <div class="event-item" style="top: 2000px; right: 15%;" onclick="openModal('1979 - CEDAW Adoption', 'The UN adopted the Convention on the Elimination of All Forms of Discrimination Against Women. Before this treaty, international laws had ignored many specific rights of women.')">
+    <img src="img_1979.png" alt="CEDAW">
+    <div class="event-title">CEDAW Treaty</div>
+  </div>
+
+  <div class="event-item" style="top: 3800px; left: 25%;" onclick="openModal('1981 - First Feminist Encuentro', 'Latin American and Caribbean feminists marked November 25 as a day of awareness. They had fought for justice long before it was globally recognized.')">
+    <img src="img_1981.png" alt="Feminist Encuentro">
+    <div class="event-title">Latin American Movement</div>
+  </div>
+
+  <div class="event-item" style="top: 5500px; right: 25%;" onclick="openModal('1993 - UN Declaration', 'The UN published the Declaration on the Elimination of Violence against Women, providing the first international definition and framework for this specific problem.')">
+    <img src="img_1993.png" alt="UN Declaration">
+    <div class="event-title">First Official Definition</div>
+  </div>
+
+  <div class="event-item" style="top: 7200px; left: 10%;" onclick="openModal('1999 - International Day', 'The UN General Assembly officially designated November 25 as the International Day for the Elimination of Violence against Women. Governments have organized massive campaigns since then.')">
+    <img src="img_1999.png" alt="UN Assembly">
+    <div class="event-title">Official Recognition</div>
+  </div>
+
+  <div class="event-item" style="top: 8800px; right: 10%;" onclick="openModal('2008 - UNiTE Campaign', 'The UN Secretary-General launched the UNiTE campaign to end violence against women. It proudly proclaimed the 25th of each month as Orange Day to keep the awareness alive all year.')">
+    <img src="img_2008.png" alt="UNiTE">
+    <div class="event-title">Birth of Orange Day</div>
+  </div>
+
+  <div class="event-item" style="top: 11000px; left: 50%; transform: translateX(-50%);" onclick="openModal('2026 - Call to Action', 'Organizations have worked tirelessly to spread the message worldwide. Today, we can promote respect in our daily lives. We must support survivors, and everyone should build safe relationships.')">
+    <img src="img_2026.png" alt="Present Day">
+    <div class="event-title">What Can We Do Today?</div>
+  </div>
+
+  <div class="modal-overlay" id="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-text" style="line-height: 1.6; font-size: 1.1rem;"></p>
+    </div>
+  </div>
+
+  <script>
+    const yearDisplay = document.getElementById('year-display');
+    const startYear = 1960;
+    const endYear = 2026;
+
+    window.addEventListener('scroll', () => {
+      const scrollPosition = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollPosition / maxScroll;
+
+      let currentYear = Math.floor(startYear + (scrollPercent * (endYear - startYear)));
+      
+      if (currentYear < startYear) currentYear = startYear;
+      if (currentYear > endYear) currentYear = endYear;
+
+      yearDisplay.textContent = currentYear;
+    });
+
+    function openModal(title, text) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-text').textContent = text;
+      document.getElementById('modal').style.display = 'flex';
+      yearDisplay.style.opacity = '0';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      yearDisplay.style.opacity = '0.4';
+    }
+  </script>
+
+</body>
+</html>

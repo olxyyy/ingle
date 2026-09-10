@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sección</title>
+  <style>
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      cursor: pointer; /* Indica que se puede hacer clic */
+    }
+
+    img {
+      max-width: 250px;
+      height: auto;
+      user-select: none;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      color: #e67e22;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid #e67e22;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+
+    .back-btn:hover {
+      background-color: #e67e22;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="Dog.gif" alt="Sleeping Dog" id="dog-gif">
+
+  <audio id="audio-dog" src="musica.mp3" loop></audio>
+
+  <a href="index.html" class="back-btn">← Volver al inicio</a>
+
+  <script>
+    const audio = document.getElementById('audio-dog');
+    
+    // Al hacer clic en cualquier parte de la pantalla, reproduce/pausa la música
+    document.body.addEventListener('click', (e) => {
+      // Evita activar el audio si se hace clic en el botón de regresar
+      if(e.target.tagName === 'A') return;
+
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+  </script>
+
+</body>
+</html>

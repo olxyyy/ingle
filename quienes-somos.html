@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Orange Day Campaign</title>
+  <style>
+    body {
+      background-color: #fce1d0;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #333;
+      cursor: url('lazo-normal.png'), auto;
+    }
+
+    a, button, .ig-post, .ig-avatar {
+      cursor: url('lazo-deshecho.png'), pointer;
+    }
+
+    .nav-bar {
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .back-btn {
+      background-color: #ffffff;
+      border: 1.5px solid #e67e22;
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: #d35400;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .back-btn:hover {
+      background-color: #ffe6d5;
+    }
+
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .box {
+      background-color: #ffffff;
+      border: 2px dashed #e67e22;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .about-header h1 {
+      color: #d35400;
+      margin-top: 0;
+      font-size: 2.2rem;
+    }
+
+    .about-header p {
+      line-height: 1.7;
+      font-size: 1.1rem;
+      color: #444;
+    }
+
+    .highlight-box {
+      background-color: #fff3e6;
+      border-left: 4px solid #e67e22;
+      padding: 15px;
+      margin: 20px 0;
+      font-style: italic;
+    }
+
+    .video-section {
+      text-align: center;
+    }
+
+    .video-section h2 {
+      color: #d35400;
+      margin-top: 0;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      max-width: 700px;
+      margin: 15px auto 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #e67e22;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    .ig-container {
+      background-color: #ffffff;
+      border: 1px solid #dbdbdb;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .ig-header-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8e8e8e;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .ig-profile {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      border-bottom: 1px solid #efefef;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .ig-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid #e67e22;
+      padding: 2px;
+      object-fit: cover;
+      transition: transform 0.2s;
+    }
+
+    .ig-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .ig-info h2 {
+      margin: 0 0 5px 0;
+      font-size: 1.4rem;
+      color: #262626;
+    }
+
+    .ig-stats {
+      display: flex;
+      gap: 20px;
+      margin: 10px 0;
+      font-size: 0.95rem;
+    }
+
+    .ig-bio {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .ig-post {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background-color: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .ig-post img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay img {
+      max-width: 80%;
+      max-height: 80vh;
+      border-radius: 12px;
+      border: 3px solid #e67e22;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #b3541e;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="back-btn">← Back to Main Page</a>
+  </nav>
+
+  <div class="main-container">
+
+    <div class="box about-header">
+      <h1>Who We Are</h1>
+      <p>
+        We are a dedicated group of students committed to raising awareness about human rights, gender equality, and the prevention of violence against women and girls. Through this digital campaign, our goal is to open a respectful space to discuss how women's rights have been historically overlooked and why they must be unconditionally protected today.
+      </p>
+
+      <div class="highlight-box">
+        "Women's rights are human rights. Raising our voices today builds a safer tomorrow for everyone."
+      </div>
+
+      <p>
+        Our team believes that education, empathy, and active participation are the core tools to dismantle gender-based violence. By combining historical analysis, creative media, and clear communication, we aim to inspire our school community to take action and promote safe, respectful relationships every single day.
+      </p>
+    </div>
+
+    <div class="box video-section">
+      <h2>Orange Day Documentary</h2>
+      <p>Watch this video to learn more about the history and impact of the global movement.</p>
+      <div class="video-wrapper">
+        <video controls poster="portada_video.png">
+          <source src="documental.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <div class="ig-container">
+      <div class="ig-header-title">Follow Us On Social Media</div>
+
+      <div class="ig-profile">
+        <img src="perfil_ig.png" alt="Profile Picture" class="ig-avatar" onclick="openProfileImage()">
+        
+        <div class="ig-info">
+          <h2>@orangeday_campaign</h2>
+          <div class="ig-stats">
+            <span><strong>3</strong> posts</span>
+            <span><strong>115</strong> followers</span>
+            <span><strong>0</strong> following</span>
+          </div>
+          <div class="ig-bio">
+            <strong>Orange Day Student Movement</strong><br>
+            Educational Campaign for Gender Equality & Non-Violence 🧡<br>
+            Escuela Preparatoria Oficial 115
+          </div>
+        </div>
+      </div>
+
+      <div class="ig-grid">
+        <div class="ig-post">
+          <img src="post_ig1.png" alt="Post 1">
+        </div>
+        <div class="ig-post">
+          <img src="post_ig2.png" alt="Post 2">
+        </div>
+        <div class="ig-post">
+          <img src="post_ig3.png" alt="Post 3">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="img-modal" onclick="closeProfileImage()">
+    <img src="perfil_ig.png" alt="Profile Expanded">
+  </div>
+
+  <footer>
+    <p>Orange Day Digital Campaign</p>
+  </footer>
+
+  <script>
+    function openProfileImage() {
+      document.getElementById('img-modal').style.display = 'flex';
+    }
+
+    function closeProfileImage() {
+      document.getElementById('img-modal').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
