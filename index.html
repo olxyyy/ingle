@@ -175,7 +175,28 @@
       margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .comment-actions {
+      display: flex;
       align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .reaction-btn {
+      background-color: #ffffff;
+      border: 1px solid #e67e22;
+      color: #d35400;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+
+    .reaction-btn:hover {
+      background-color: #ffe6d5;
     }
 
     .delete-btn {
@@ -248,6 +269,7 @@
       <div id="user-badge" style="display: none; align-items: center; gap: 8px; background-color: #ffffff; border: 1.5px solid #e67e22; padding: 6px 14px; border-radius: 20px;">
         <span id="user-badge-dot" style="width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span>
         <span id="user-badge-name" style="color: #d35400; font-weight: bold; font-size: 0.9rem;"></span>
+        <button type="button" onclick="logoutUser()" style="background-color: #888; padding: 4px 10px; font-size: 0.75rem; margin: 0;">Log Out</button>
       </div>
       <a href="quienes-somos.html" class="nav-link">About Us</a>
     </div>
@@ -294,15 +316,21 @@
 
     </div>
 
-    <div class="box forum-box">
-      <h2>Orange Day Questionnaire</h2>
-      <p>Do you think it's important to run community campaigns to raise awareness about Orange Day?</p>
-      <select id="questionnaire-answer">
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
-      <button type="button" onclick="submitQuestionnaire()">Submit Answer</button>
-      <p id="questionnaire-status" style="font-weight: bold; margin-top: 10px;"></p>
+    <div class="box forum-box" style="text-align: center;">
+      <h2>Orange Day Survey</h2>
+      <p>Answer a short survey about Orange Day awareness in your community.</p>
+      <a href="survey.html" class="link-area" style="display: inline-block;">Take the Survey</a>
+    </div>
+
+    <div id="admin-dashboard" class="box forum-box" style="display: none;">
+      <h2 style="color: #d35400;">Admin Dashboard</h2>
+      <p>Moderation privileges active.</p>
+
+      <h3>Survey Results</h3>
+      <canvas id="graficaResultados" height="90"></canvas>
+
+      <h3 style="margin-top: 20px;">Forum Moderation</h3>
+      <div id="admin-comments-list" style="max-height: 250px; overflow-y: auto;"></div>
     </div>
 
     <div class="box forum-box">
@@ -339,18 +367,6 @@
         <input type="password" id="login-password" placeholder="Password">
         <button type="button" onclick="loginUser()" style="width: 100%; background-color: #d35400;">Log In</button>
         <p id="login-status" style="font-weight: bold; margin-top: 10px;"></p>
-      </div>
-
-      <div id="admin-view" style="display: none;">
-        <h2 style="color: #d35400;">Imperial Dashboard</h2>
-        <p>Moderation privileges active.</p>
-        
-        <h3>Questionnaire Results</h3>
-        <canvas id="graficaResultados" width="100%" height="50"></canvas>
-        
-        <h3 style="margin-top: 20px;">Forum Moderation</h3>
-        <div id="admin-comments-list" style="max-height: 250px; overflow-y: auto;"></div>
-        <button type="button" onclick="logoutUser()" style="margin-top: 15px; background-color: #888;">Log Out</button>
       </div>
     </div>
   </div>
@@ -403,9 +419,7 @@
       const username = user.user_metadata?.username;
       if (username === "Imperial") {
         isAdmin = true;
-        document.getElementById('signup-view').style.display = 'none';
-        document.getElementById('login-view').style.display = 'none';
-        document.getElementById('admin-view').style.display = 'block';
+        document.getElementById('admin-dashboard').style.display = 'block';
         loadComments();
         loadChart();
       }
@@ -413,8 +427,6 @@
 
     function openModal(view) {
       document.getElementById('account-modal').style.display = 'flex';
-
-      if (isAdmin) return;
 
       if (view === 'signup') {
         document.getElementById('signup-view').style.display = 'block';
@@ -490,53 +502,20 @@
 
         if (username === "Imperial" && password === "Orange Empire") {
           isAdmin = true;
-          document.getElementById('signup-view').style.display = 'none';
-          document.getElementById('login-view').style.display = 'none';
-          document.getElementById('admin-view').style.display = 'block';
+          document.getElementById('admin-dashboard').style.display = 'block';
           loadComments();
           loadChart();
-        } else {
-          setTimeout(closeModal, 1000);
         }
+        closeModal();
       }
     }
 
     async function logoutUser() {
       await _supabase.auth.signOut();
       isAdmin = false;
-      document.getElementById('admin-view').style.display = 'none';
-      document.getElementById('login-view').style.display = 'block';
-      document.getElementById('signup-view').style.display = 'none';
-      document.getElementById('login-status').innerText = "";
+      document.getElementById('admin-dashboard').style.display = 'none';
       hideUserBadge();
       loadComments();
-    }
-
-    async function submitQuestionnaire() {
-      const { data: { user } } = await _supabase.auth.getUser();
-      const status = document.getElementById('questionnaire-status');
-      const answer = document.getElementById('questionnaire-answer').value;
-
-      if (!user) {
-        status.innerText = "You must log in (Account) to answer.";
-        status.style.color = "red";
-        openModal();
-        return;
-      }
-
-      const author = user.user_metadata?.display_name || "Anonymous";
-
-      const { error } = await _supabase
-        .from('respuestas_cuestionario')
-        .insert([{ user_id: user.id, respuesta: answer, autor: author }]);
-
-      if (error) {
-        status.innerText = "Error submitting: " + error.message;
-        status.style.color = "red";
-      } else {
-        status.innerText = "Answer submitted successfully!";
-        status.style.color = "green";
-      }
     }
 
     async function postComment() {
@@ -590,13 +569,19 @@
 
       comments.forEach(c => {
         const name = c.autor || "Anonymous";
+        const likes = c.likes || 0;
+        const dislikes = c.dislikes || 0;
 
         const div = document.createElement('div');
         div.className = 'comment-card';
         div.innerHTML = `
           <div>
             <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${name}</p>
-            <p style="margin:0;">${c.comentario}</p>
+            <p style="margin:0 0 8px 0;">${c.comentario}</p>
+            <div class="comment-actions">
+              <button type="button" class="reaction-btn" onclick="reactToComment(${c.id}, 'likes')">👍 ${likes}</button>
+              <button type="button" class="reaction-btn" onclick="reactToComment(${c.id}, 'dislikes')">👎 ${dislikes}</button>
+            </div>
           </div>
         `;
         publicList.appendChild(div);
@@ -607,7 +592,8 @@
           adminDiv.innerHTML = `
             <div>
               <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${name}</p>
-              <p style="margin:0;">${c.comentario}</p>
+              <p style="margin:0 0 8px 0;">${c.comentario}</p>
+              <p style="margin:0; font-size:0.8rem; color:#888;">👍 ${likes} &nbsp; 👎 ${dislikes}</p>
             </div>
             <button class="delete-btn" onclick="deleteComment(${c.id})">Delete</button>
           `;
@@ -616,7 +602,27 @@
       });
     }
 
+    async function reactToComment(id, field) {
+      const { data: current, error: fetchError } = await _supabase
+        .from('foro_comentarios')
+        .select(field)
+        .eq('id', id)
+        .single();
+
+      if (fetchError) return;
+
+      const newValue = (current[field] || 0) + 1;
+
+      const { error } = await _supabase
+        .from('foro_comentarios')
+        .update({ [field]: newValue })
+        .eq('id', id);
+
+      if (!error) loadComments();
+    }
+
     async function deleteComment(id) {
+      if (!isAdmin) return;
       if (!confirm("Are you sure you want to delete this comment?")) return;
 
       const { error } = await _supabase
@@ -632,16 +638,20 @@
     }
 
     async function loadChart() {
-      const { data, error } = await _supabase.from('respuestas_cuestionario').select('respuesta');
+      const { data, error } = await _supabase.from('respuestas_cuestionario').select('pregunta, respuesta');
       if (error) return;
 
-      let countYes = 0;
-      let countNo = 0;
-
+      const questionMap = {};
       data.forEach(row => {
-        if (row.respuesta === 'Yes' || row.respuesta === 'Sí') countYes++;
-        else countNo++;
+        const q = row.pregunta || "General";
+        if (!questionMap[q]) questionMap[q] = { yes: 0, no: 0 };
+        if (row.respuesta === 'Yes' || row.respuesta === 'Sí') questionMap[q].yes++;
+        else questionMap[q].no++;
       });
+
+      const labels = Object.keys(questionMap);
+      const yesData = labels.map(q => questionMap[q].yes);
+      const noData = labels.map(q => questionMap[q].no);
 
       const ctx = document.getElementById('graficaResultados').getContext('2d');
 
@@ -650,17 +660,20 @@
       }
 
       chartInstance = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-          labels: ['Answered Yes', 'Answered No'],
-          datasets: [{
-            data: [countYes, countNo],
-            backgroundColor: ['#e67e22', '#d35400'],
-            borderWidth: 1
-          }]
+          labels: labels,
+          datasets: [
+            { label: 'Yes', data: yesData, backgroundColor: '#e67e22' },
+            { label: 'No', data: noData, backgroundColor: '#d35400' }
+          ]
         },
         options: {
           responsive: true,
+          scales: {
+            x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 0 } },
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+          },
           plugins: {
             legend: { position: 'bottom' }
           }

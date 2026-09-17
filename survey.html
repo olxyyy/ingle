@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orange Day Survey</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    if (!window._supabase) {
+      const SUPABASE_URL = 'https://ihemqvyeziwyaqxzbupq.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZW1xdnlleml3eWFxeHpidXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NzU1NzgsImV4cCI6MjEwNTI1MTU3OH0.6013KVtgYpE5MWI1EwU4kVYL7d0SFHKmHmM8vW1LBGE';
+
+      window._supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #fce1d0;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .main-container {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .box {
+      background-color: #ffffff;
+      border: 2px dashed #e67e22;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    h1, h2 {
+      color: #d35400;
+      text-align: center;
+    }
+
+    .back-link {
+      color: #d35400;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .question-block {
+      border-bottom: 1px solid #f0d9c5;
+      padding: 15px 0;
+    }
+
+    .question-block:last-of-type {
+      border-bottom: none;
+    }
+
+    .question-text {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .answer-options {
+      display: flex;
+      gap: 20px;
+    }
+
+    .answer-options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    button {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #d35400;
+    }
+
+    #locked-message {
+      display: none;
+      text-align: center;
+    }
+
+    #survey-form {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+    <div class="box">
+      <h1>Orange Day Survey</h1>
+
+      <div id="locked-message">
+        <p>You must log in to take this survey.</p>
+        <a href="index.html" class="back-link">Go back and log in</a>
+      </div>
+
+      <form id="survey-form">
+        <div id="questions-container"></div>
+        <button type="button" onclick="submitSurvey()">Submit Answers</button>
+        <p id="survey-status" style="font-weight: bold; text-align: center; margin-top: 10px;"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      "Do you know what Orange Day represents?",
+      "Have you ever witnessed violence against women in your community?",
+      "Do you think local authorities do enough to prevent gender violence?",
+      "Would you attend a community event to raise awareness about this topic?",
+      "Do you believe social media is effective for spreading awareness?",
+      "Have you shared information about Orange Day with others?",
+      "Do you think schools should teach about gender violence prevention?",
+      "Would you support stronger laws against gender violence?",
+      "Do you feel safe walking alone in your neighborhood at night?",
+      "Do you think this campaign can make a real difference?"
+    ];
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = "";
+
+      questions.forEach((q, index) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+          <p class="question-text">${index + 1}. ${q}</p>
+          <div class="answer-options">
+            <label><input type="radio" name="q${index}" value="Yes"> Yes</label>
+            <label><input type="radio" name="q${index}" value="No"> No</label>
+          </div>
+        `;
+        container.appendChild(block);
+      });
+    }
+
+    async function checkAccess() {
+      const { data: { user } } = await _supabase.auth.getUser();
+
+      if (!user) {
+        document.getElementById('locked-message').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('survey-form').style.display = 'block';
+      renderQuestions();
+    }
+
+    async function submitSurvey() {
+      const { data: { user } } = await _supabase.auth.getUser();
+      const status = document.getElementById('survey-status');
+
+      if (!user) {
+        status.innerText = "You must log in to submit the survey.";
+        status.style.color = "red";
+        return;
+      }
+
+      const author = user.user_metadata?.display_name || "Anonymous";
+      const rows = [];
+
+      for (let i = 0; i < questions.length; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          status.innerText = "Please answer all questions before submitting.";
+          status.style.color = "red";
+          return;
+        }
+        rows.push({
+          user_id: user.id,
+          autor: author,
+          pregunta: questions[i],
+          respuesta: selected.value
+        });
+      }
+
+      const { error } = await _supabase.from('respuestas_cuestionario').insert(rows);
+
+      if (error) {
+        status.innerText = "Error submitting survey: " + error.message;
+        status.style.color = "red";
+      } else {
+        status.innerText = "Thank you! Your answers have been submitted.";
+        status.style.color = "green";
+        document.getElementById('survey-form').querySelectorAll('input').forEach(i => i.checked = false);
+      }
+    }
+
+    window.onload = checkAccess;
+  </script>
+
+</body>
+</html>
