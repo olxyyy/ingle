@@ -5,15 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orange Day Digital Campaign</title>
 
-  <!-- 1. SDK de Supabase y Chart.js para los gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- 2. Inicialización corregida (usando _supabase) -->
   <script>
-    // Usamos window._supabase (propiedad, no const/let) para que si el script
-    // se vuelve a ejecutar (por ejemplo un hot-reload del editor/preview)
-    // NO truene con "Identifier 'supabase' has already been declared".
     if (!window._supabase) {
       const SUPABASE_URL = 'https://ihemqvyeziwyaqxzbupq.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZW1xdnlleml3eWFxeHpidXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NzU1NzgsImV4cCI6MjEwNTI1MTU3OH0.6013KVtgYpE5MWI1EwU4kVYL7d0SFHKmHmM8vW1LBGE';
@@ -289,16 +284,15 @@
 
     </div>
 
-    <!-- CUESTIONARIO AGREGADO -->
     <div class="box forum-box">
       <h2>Orange Day Questionnaire</h2>
-      <p>¿Consideras importante realizar campañas comunitarias sobre la concientización del Día Naranja?</p>
-      <select id="cuestionario-respuesta">
-        <option value="Sí">Sí</option>
+      <p>Do you think it's important to run community campaigns to raise awareness about Orange Day?</p>
+      <select id="questionnaire-answer">
+        <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-      <button type="button" onclick="enviarCuestionario()">Enviar Respuesta</button>
-      <p id="cuestionario-status" style="font-weight: bold; margin-top: 10px;"></p>
+      <button type="button" onclick="submitQuestionnaire()">Submit Answer</button>
+      <p id="questionnaire-status" style="font-weight: bold; margin-top: 10px;"></p>
     </div>
 
     <div class="box forum-box">
@@ -319,15 +313,15 @@
       
       <div id="login-view">
         <h2>Account Access</h2>
-        <input type="text" id="auth-username" placeholder="Username (para iniciar sesión)">
-        <input type="text" id="auth-displayname" placeholder="Nombre para mostrar (solo para registro)">
+        <input type="text" id="auth-username" placeholder="Username">
+        <input type="text" id="auth-displayname" placeholder="Display name (for your comments)">
         <input type="password" id="auth-password" placeholder="Password">
         <div style="display: flex; gap: 10px;">
           <button type="button" onclick="registerUser()">Sign Up</button>
           <button type="button" onclick="loginUser()" style="background-color: #d35400;">Log In</button>
         </div>
         <p style="font-size: 0.8rem; color: #888; margin-top: -5px;">
-          El "Username" es privado, solo para entrar a tu cuenta. El "Nombre para mostrar" es lo que verán los demás en tus comentarios.
+          Your "Username" is private and only used to log in. Your "Display name" is what other people will see on your comments.
         </p>
         <p id="auth-status" style="font-weight: bold; margin-top: 10px;"></p>
       </div>
@@ -336,8 +330,7 @@
         <h2 style="color: #d35400;">Imperial Dashboard</h2>
         <p>Moderation privileges active.</p>
         
-        <!-- GRÁFICA DE RESULTADOS DEL CUESTIONARIO -->
-        <h3>Resultados del Cuestionario</h3>
+        <h3>Questionnaire Results</h3>
         <canvas id="graficaResultados" width="100%" height="50"></canvas>
         
         <h3 style="margin-top: 20px;">Forum Moderation</h3>
@@ -353,7 +346,7 @@
 
   <script>
     let isAdmin = false;
-    let chartInstance = null; // Variable para guardar la gráfica
+    let chartInstance = null;
 
     window.onload = function() {
       loadComments();
@@ -374,12 +367,11 @@
       const status = document.getElementById('auth-status');
 
       if (!username || !password || !displayName) {
-        status.innerText = "Completa usuario, nombre para mostrar y contraseña.";
+        status.innerText = "Please fill in username, display name and password.";
         status.style.color = "red";
         return;
       }
 
-      // Dominio con formato válido (no se envía correo real, solo sirve como identificador interno de Supabase Auth)
       const fakeEmail = `${username.toLowerCase()}@orangeday.com`;
 
       const { data, error } = await _supabase.auth.signUp({
@@ -392,7 +384,7 @@
         status.innerText = "Error: " + error.message;
         status.style.color = "red";
       } else {
-        status.innerText = "¡Cuenta creada con éxito!";
+        status.innerText = "Account created successfully!";
         status.style.color = "green";
       }
     }
@@ -427,7 +419,7 @@
           document.getElementById('login-view').style.display = 'none';
           document.getElementById('admin-view').style.display = 'block';
           loadComments();
-          cargarGrafica(); // Carga la gráfica al iniciar sesión como Admin
+          loadChart();
         } else {
           setTimeout(closeModal, 1000);
         }
@@ -443,30 +435,29 @@
       loadComments();
     }
 
-    // FUNCIÓN PARA ENVIAR CUESTIONARIO
-    async function enviarCuestionario() {
+    async function submitQuestionnaire() {
       const { data: { user } } = await _supabase.auth.getUser();
-      const status = document.getElementById('cuestionario-status');
-      const respuesta = document.getElementById('cuestionario-respuesta').value;
+      const status = document.getElementById('questionnaire-status');
+      const answer = document.getElementById('questionnaire-answer').value;
 
       if (!user) {
-        status.innerText = "Debes iniciar sesión (Account) para responder.";
+        status.innerText = "You must log in (Account) to answer.";
         status.style.color = "red";
         openModal();
         return;
       }
 
-      const autor = user.user_metadata?.display_name || "Anónimo";
+      const author = user.user_metadata?.display_name || "Anonymous";
 
       const { error } = await _supabase
         .from('respuestas_cuestionario')
-        .insert([{ user_id: user.id, respuesta: respuesta, autor: autor }]);
+        .insert([{ user_id: user.id, respuesta: answer, autor: author }]);
 
       if (error) {
-        status.innerText = "Error al enviar: " + error.message;
+        status.innerText = "Error submitting: " + error.message;
         status.style.color = "red";
       } else {
-        status.innerText = "¡Respuesta registrada con éxito!";
+        status.innerText = "Answer submitted successfully!";
         status.style.color = "green";
       }
     }
@@ -489,11 +480,11 @@
         return;
       }
 
-      const autor = user.user_metadata?.display_name || "Anónimo";
+      const author = user.user_metadata?.display_name || "Anonymous";
 
       const { error } = await _supabase
         .from('foro_comentarios')
-        .insert([{ user_id: user.id, comentario: message, autor: autor }]);
+        .insert([{ user_id: user.id, comentario: message, autor: author }]);
 
       if (error) {
         status.innerText = "Error posting comment: " + error.message;
@@ -521,13 +512,13 @@
       adminList.innerHTML = "";
 
       comments.forEach(c => {
-        const nombre = c.autor || "Anónimo";
+        const name = c.autor || "Anonymous";
 
         const div = document.createElement('div');
         div.className = 'comment-card';
         div.innerHTML = `
           <div>
-            <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${nombre}</p>
+            <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${name}</p>
             <p style="margin:0;">${c.comentario}</p>
           </div>
         `;
@@ -538,7 +529,7 @@
           adminDiv.className = 'comment-card';
           adminDiv.innerHTML = `
             <div>
-              <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${nombre}</p>
+              <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${name}</p>
               <p style="margin:0;">${c.comentario}</p>
             </div>
             <button class="delete-btn" onclick="deleteComment(${c.id})">Delete</button>
@@ -563,22 +554,20 @@
       }
     }
 
-    // FUNCIÓN PARA CARGAR LA GRÁFICA DE CHART.JS
-    async function cargarGrafica() {
+    async function loadChart() {
       const { data, error } = await _supabase.from('respuestas_cuestionario').select('respuesta');
       if (error) return;
 
-      let countSi = 0;
+      let countYes = 0;
       let countNo = 0;
 
-      data.forEach(fila => {
-        if (fila.respuesta === 'Sí' || fila.respuesta === 'Yes') countSi++;
+      data.forEach(row => {
+        if (row.respuesta === 'Yes' || row.respuesta === 'Sí') countYes++;
         else countNo++;
       });
 
       const ctx = document.getElementById('graficaResultados').getContext('2d');
-      
-      // Si la gráfica ya existe, la destruimos para dibujarla actualizada
+
       if (chartInstance) {
         chartInstance.destroy();
       }
@@ -586,9 +575,9 @@
       chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Respondieron Sí', 'Respondieron No'],
+          labels: ['Answered Yes', 'Answered No'],
           datasets: [{
-            data: [countSi, countNo],
+            data: [countYes, countNo],
             backgroundColor: ['#e67e22', '#d35400'],
             borderWidth: 1
           }]
