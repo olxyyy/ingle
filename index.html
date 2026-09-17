@@ -239,9 +239,9 @@
 <body>
 
   <nav class="nav-bar">
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <button class="account-btn" onclick="openModal()">Log In</button>
-      <button class="account-btn" onclick="openModal()">Sign Up</button>
+    <div id="auth-buttons" style="display: flex; gap: 10px; align-items: center;">
+      <button class="account-btn" onclick="openModal('login')">Log In</button>
+      <button class="account-btn" onclick="openModal('signup')">Sign Up</button>
     </div>
 
     <div style="display: flex; gap: 15px; align-items: center;">
@@ -321,19 +321,24 @@
     <div class="modal-content">
       <button class="close-btn" onclick="closeModal()">&times;</button>
       
-      <div id="login-view">
-        <h2>Account Access</h2>
-        <input type="text" id="auth-username" placeholder="Username">
-        <input type="text" id="auth-displayname" placeholder="Display name (for your comments)">
-        <input type="password" id="auth-password" placeholder="Password">
-        <div style="display: flex; gap: 10px;">
-          <button type="button" onclick="registerUser()">Sign Up</button>
-          <button type="button" onclick="loginUser()" style="background-color: #d35400;">Log In</button>
-        </div>
-        <p style="font-size: 0.8rem; color: #888; margin-top: -5px;">
+      <div id="signup-view">
+        <h2>Create Account</h2>
+        <input type="text" id="signup-username" placeholder="Username (like a fake email, for login)">
+        <input type="text" id="signup-displayname" placeholder="Display name (for your comments)">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button type="button" onclick="registerUser()" style="width: 100%;">Sign Up</button>
+        <p style="font-size: 0.8rem; color: #888; margin-top: 8px;">
           Your "Username" is private and only used to log in. Your "Display name" is what other people will see on your comments.
         </p>
-        <p id="auth-status" style="font-weight: bold; margin-top: 10px;"></p>
+        <p id="signup-status" style="font-weight: bold; margin-top: 10px;"></p>
+      </div>
+
+      <div id="login-view" style="display: none;">
+        <h2>Log In</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button type="button" onclick="loginUser()" style="width: 100%; background-color: #d35400;">Log In</button>
+        <p id="login-status" style="font-weight: bold; margin-top: 10px;"></p>
       </div>
 
       <div id="admin-view" style="display: none;">
@@ -380,10 +385,12 @@
       dot.style.backgroundColor = stringToColor(name);
       nameEl.innerText = name;
       badge.style.display = 'flex';
+      document.getElementById('auth-buttons').style.display = 'none';
     }
 
     function hideUserBadge() {
       document.getElementById('user-badge').style.display = 'none';
+      document.getElementById('auth-buttons').style.display = 'flex';
     }
 
     async function restoreSession() {
@@ -396,6 +403,7 @@
       const username = user.user_metadata?.username;
       if (username === "Imperial") {
         isAdmin = true;
+        document.getElementById('signup-view').style.display = 'none';
         document.getElementById('login-view').style.display = 'none';
         document.getElementById('admin-view').style.display = 'block';
         loadComments();
@@ -403,8 +411,18 @@
       }
     }
 
-    function openModal() {
+    function openModal(view) {
       document.getElementById('account-modal').style.display = 'flex';
+
+      if (isAdmin) return;
+
+      if (view === 'signup') {
+        document.getElementById('signup-view').style.display = 'block';
+        document.getElementById('login-view').style.display = 'none';
+      } else {
+        document.getElementById('signup-view').style.display = 'none';
+        document.getElementById('login-view').style.display = 'block';
+      }
     }
 
     function closeModal() {
@@ -412,10 +430,10 @@
     }
 
     async function registerUser() {
-      const username = document.getElementById('auth-username').value.trim();
-      const displayName = document.getElementById('auth-displayname').value.trim();
-      const password = document.getElementById('auth-password').value;
-      const status = document.getElementById('auth-status');
+      const username = document.getElementById('signup-username').value.trim();
+      const displayName = document.getElementById('signup-displayname').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const status = document.getElementById('signup-status');
 
       if (!username || !password || !displayName) {
         status.innerText = "Please fill in username, display name and password.";
@@ -443,9 +461,9 @@
     }
 
     async function loginUser() {
-      const username = document.getElementById('auth-username').value.trim();
-      const password = document.getElementById('auth-password').value;
-      const status = document.getElementById('auth-status');
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      const status = document.getElementById('login-status');
 
       if (!username || !password) {
         status.innerText = "Please enter username and password.";
@@ -472,6 +490,7 @@
 
         if (username === "Imperial" && password === "Orange Empire") {
           isAdmin = true;
+          document.getElementById('signup-view').style.display = 'none';
           document.getElementById('login-view').style.display = 'none';
           document.getElementById('admin-view').style.display = 'block';
           loadComments();
@@ -487,7 +506,8 @@
       isAdmin = false;
       document.getElementById('admin-view').style.display = 'none';
       document.getElementById('login-view').style.display = 'block';
-      document.getElementById('auth-status').innerText = "";
+      document.getElementById('signup-view').style.display = 'none';
+      document.getElementById('login-status').innerText = "";
       hideUserBadge();
       loadComments();
     }
