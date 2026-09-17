@@ -11,10 +11,15 @@
 
   <!-- 2. Inicialización corregida (usando _supabase) -->
   <script>
-    const SUPABASE_URL = 'https://ihemqvyeziwyaqxzbupq.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZW1xdnlleml3eWFxeHpidXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NzU1NzgsImV4cCI6MjEwNTI1MTU3OH0.6013KVtgYpE5MWI1EwU4kVYL7d0SFHKmHmM8vW1LBGE';
+    // Usamos window._supabase (propiedad, no const/let) para que si el script
+    // se vuelve a ejecutar (por ejemplo un hot-reload del editor/preview)
+    // NO truene con "Identifier 'supabase' has already been declared".
+    if (!window._supabase) {
+      const SUPABASE_URL = 'https://ihemqvyeziwyaqxzbupq.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZW1xdnlleml3eWFxeHpidXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NzU1NzgsImV4cCI6MjEwNTI1MTU3OH0.6013KVtgYpE5MWI1EwU4kVYL7d0SFHKmHmM8vW1LBGE';
 
-    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      window._supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
   </script>
 
   <style>
