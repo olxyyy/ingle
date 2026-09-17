@@ -239,8 +239,18 @@
 <body>
 
   <nav class="nav-bar">
-    <button class="account-btn" onclick="openModal()">Account</button>
-    <a href="quienes-somos.html" class="nav-link">About Us</a>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button class="account-btn" onclick="openModal()">Log In</button>
+      <button class="account-btn" onclick="openModal()">Sign Up</button>
+    </div>
+
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <div id="user-badge" style="display: none; align-items: center; gap: 8px; background-color: #ffffff; border: 1.5px solid #e67e22; padding: 6px 14px; border-radius: 20px;">
+        <span id="user-badge-dot" style="width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span>
+        <span id="user-badge-name" style="color: #d35400; font-weight: bold; font-size: 0.9rem;"></span>
+      </div>
+      <a href="quienes-somos.html" class="nav-link">About Us</a>
+    </div>
   </nav>
 
   <div class="main-container">
@@ -348,9 +358,50 @@
     let isAdmin = false;
     let chartInstance = null;
 
-    window.onload = function() {
+    window.onload = async function() {
       loadComments();
+      await restoreSession();
     };
+
+    function stringToColor(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const hue = Math.abs(hash) % 360;
+      return `hsl(${hue}, 70%, 50%)`;
+    }
+
+    function showUserBadge(name) {
+      const badge = document.getElementById('user-badge');
+      const dot = document.getElementById('user-badge-dot');
+      const nameEl = document.getElementById('user-badge-name');
+
+      dot.style.backgroundColor = stringToColor(name);
+      nameEl.innerText = name;
+      badge.style.display = 'flex';
+    }
+
+    function hideUserBadge() {
+      document.getElementById('user-badge').style.display = 'none';
+    }
+
+    async function restoreSession() {
+      const { data: { user } } = await _supabase.auth.getUser();
+      if (!user) return;
+
+      const displayName = user.user_metadata?.display_name || user.user_metadata?.username || "User";
+      showUserBadge(displayName);
+
+      const username = user.user_metadata?.username;
+      if (username === "Imperial") {
+        isAdmin = true;
+        document.getElementById('login-view').style.display = 'none';
+        document.getElementById('admin-view').style.display = 'block';
+        loadComments();
+        loadChart();
+      }
+    }
 
     function openModal() {
       document.getElementById('account-modal').style.display = 'flex';
@@ -386,6 +437,8 @@
       } else {
         status.innerText = "Account created successfully!";
         status.style.color = "green";
+        showUserBadge(displayName);
+        setTimeout(closeModal, 1000);
       }
     }
 
@@ -414,6 +467,9 @@
         status.innerText = "Logged in successfully!";
         status.style.color = "green";
 
+        const displayName = data.user.user_metadata?.display_name || username;
+        showUserBadge(displayName);
+
         if (username === "Imperial" && password === "Orange Empire") {
           isAdmin = true;
           document.getElementById('login-view').style.display = 'none';
@@ -432,6 +488,7 @@
       document.getElementById('admin-view').style.display = 'none';
       document.getElementById('login-view').style.display = 'block';
       document.getElementById('auth-status').innerText = "";
+      hideUserBadge();
       loadComments();
     }
 
