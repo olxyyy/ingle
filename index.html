@@ -319,12 +319,16 @@
       
       <div id="login-view">
         <h2>Account Access</h2>
-        <input type="text" id="auth-username" placeholder="Username">
+        <input type="text" id="auth-username" placeholder="Username (para iniciar sesión)">
+        <input type="text" id="auth-displayname" placeholder="Nombre para mostrar (solo para registro)">
         <input type="password" id="auth-password" placeholder="Password">
         <div style="display: flex; gap: 10px;">
           <button type="button" onclick="registerUser()">Sign Up</button>
           <button type="button" onclick="loginUser()" style="background-color: #d35400;">Log In</button>
         </div>
+        <p style="font-size: 0.8rem; color: #888; margin-top: -5px;">
+          El "Username" es privado, solo para entrar a tu cuenta. El "Nombre para mostrar" es lo que verán los demás en tus comentarios.
+        </p>
         <p id="auth-status" style="font-weight: bold; margin-top: 10px;"></p>
       </div>
 
@@ -365,29 +369,30 @@
 
     async function registerUser() {
       const username = document.getElementById('auth-username').value.trim();
+      const displayName = document.getElementById('auth-displayname').value.trim();
       const password = document.getElementById('auth-password').value;
       const status = document.getElementById('auth-status');
 
-      if (!username || !password) {
-        status.innerText = "Please enter both username and password.";
+      if (!username || !password || !displayName) {
+        status.innerText = "Completa usuario, nombre para mostrar y contraseña.";
         status.style.color = "red";
         return;
       }
 
-      const fakeEmail = `${username.toLowerCase()}@orangeday.local`;
+      // Dominio con formato válido (no se envía correo real, solo sirve como identificador interno de Supabase Auth)
+      const fakeEmail = `${username.toLowerCase()}@orangeday.com`;
 
-      // Cambiado a _supabase
       const { data, error } = await _supabase.auth.signUp({
         email: fakeEmail,
         password: password,
-        options: { data: { username: username } }
+        options: { data: { username: username, display_name: displayName } }
       });
 
       if (error) {
         status.innerText = "Error: " + error.message;
         status.style.color = "red";
       } else {
-        status.innerText = "Account created successfully!";
+        status.innerText = "¡Cuenta creada con éxito!";
         status.style.color = "green";
       }
     }
@@ -403,9 +408,8 @@
         return;
       }
 
-      const fakeEmail = `${username.toLowerCase()}@orangeday.local`;
+      const fakeEmail = `${username.toLowerCase()}@orangeday.com`;
 
-      // Cambiado a _supabase
       const { data, error } = await _supabase.auth.signInWithPassword({
         email: fakeEmail,
         password: password
@@ -452,9 +456,11 @@
         return;
       }
 
+      const autor = user.user_metadata?.display_name || "Anónimo";
+
       const { error } = await _supabase
         .from('respuestas_cuestionario')
-        .insert([{ user_id: user.id, respuesta: respuesta }]);
+        .insert([{ user_id: user.id, respuesta: respuesta, autor: autor }]);
 
       if (error) {
         status.innerText = "Error al enviar: " + error.message;
@@ -483,9 +489,11 @@
         return;
       }
 
+      const autor = user.user_metadata?.display_name || "Anónimo";
+
       const { error } = await _supabase
         .from('foro_comentarios')
-        .insert([{ user_id: user.id, comentario: message }]);
+        .insert([{ user_id: user.id, comentario: message, autor: autor }]);
 
       if (error) {
         status.innerText = "Error posting comment: " + error.message;
@@ -513,16 +521,26 @@
       adminList.innerHTML = "";
 
       comments.forEach(c => {
+        const nombre = c.autor || "Anónimo";
+
         const div = document.createElement('div');
         div.className = 'comment-card';
-        div.innerHTML = `<p style="margin:0;">${c.comentario}</p>`;
+        div.innerHTML = `
+          <div>
+            <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${nombre}</p>
+            <p style="margin:0;">${c.comentario}</p>
+          </div>
+        `;
         publicList.appendChild(div);
 
         if (isAdmin) {
           const adminDiv = document.createElement('div');
           adminDiv.className = 'comment-card';
           adminDiv.innerHTML = `
-            <p style="margin:0;">${c.comentario}</p>
+            <div>
+              <p style="margin:0 0 4px 0; color:#d35400; font-weight:bold; font-size:0.85rem;">${nombre}</p>
+              <p style="margin:0;">${c.comentario}</p>
+            </div>
             <button class="delete-btn" onclick="deleteComment(${c.id})">Delete</button>
           `;
           adminList.appendChild(adminDiv);
