@@ -1,197 +1,282 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Share Your Experience</title>
-    <style>
-        :root {
-            --primary-color: #ff6b35;
-            --dark-color: #2b2d42;
-            --light-bg: #f8f9fa;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--light-bg);
-            color: var(--dark-color);
-        }
-        header {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: var(--primary-color);
-        }
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-        }
-        h1, h2 {
-            color: var(--dark-color);
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        textarea {
-            resize: vertical;
-            height: 120px;
-        }
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #e05624;
-        }
-        .post {
-            border-bottom: 1px solid #eee;
-            padding: 1rem 0;
-        }
-        .post:last-child {
-            border-bottom: none;
-        }
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-        .post-author {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Share Your Experience — Orange Day</title>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Vercel Analytics Script -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <script>
+    const SUPABASE_URL = 'https://ihemqvyeziwyaqxzbupq.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImloZW1xdnlleml3eWFxeHpidXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NzU1NzgsImV4cCI6MjEwNTI1MTU3OH0.6013KVtgYpE5MWI1EwU4kVYL7d0SFHKmHmM8vW1LBGE';
+    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <style>
+    :root {
+      --maroon: #6f1d33;
+      --maroon-dark: #571626;
+      --orange: #e67e22;
+      --orange-dark: #c96613;
+      --cream: #fdf7f1;
+      --ink: #2a2420;
+      --line: #e7d9cd;
+    }
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      cursor: url('lazo-normal.png'), auto;
+    }
+    a, button { cursor: url('lazo-deshecho.png'), pointer; }
+    input, textarea { cursor: url('lazo-escribir.png'), text; }
+
+    .utility-bar {
+      background: var(--maroon);
+      color: #fff;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 24px;
+    }
+    .utility-bar a { color: #fff; text-decoration: none; font-weight: 600; }
+    .utility-bar a:hover { text-decoration: underline; }
+
+    nav.main-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .school-brand { display: flex; align-items: center; gap: 12px; }
+    .school-badge { height: 42px; width: auto; object-fit: contain; }
+    .school-name { font-weight: 700; font-size: 1.05rem; color: var(--maroon); line-height: 1.2; }
+
+    .nav-links { display: flex; gap: 28px; font-weight: 600; font-size: 0.92rem; color: #55483f; }
+    .nav-links a { color: inherit; text-decoration: none; }
+    .nav-links a:hover, .nav-links a.active { color: var(--maroon); }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    h1, h2 {
+      font-family: 'Source Serif 4', serif;
+      color: var(--maroon);
+      margin-top: 0;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: #fdfdfd;
+    }
+    textarea {
+      resize: vertical;
+      height: 130px;
+    }
+    .btn-solid {
+      background-color: var(--maroon);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+    .btn-solid:hover {
+      background-color: var(--maroon-dark);
+    }
+    .post {
+      border-bottom: 1px solid var(--line);
+      padding: 1.2rem 0;
+    }
+    .post:last-child {
+      border-bottom: none;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: #777;
+      margin-bottom: 0.5rem;
+    }
+    .post-author {
+      font-weight: 700;
+      color: var(--orange-dark);
+    }
+    .status-msg {
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    footer { text-align: center; padding: 28px; color: #8a7a6d; font-size: 0.82rem; border-top: 1px solid var(--line); }
+  </style>
 </head>
 <body>
-    <header>
-        <h2>Awareness Campaign</h2>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="share-your-experience.html">Share Your Experience</a>
-        </nav>
-    </header>
 
-    <main class="container">
-        <section class="card">
-            <h1>Share Your Experience</h1>
-            <p>Your voice matters! Use the form below to share your story, reflections, or messages with our community.</p>
+  <!-- Barra superior -->
+  <div class="utility-bar">
+    <span>🧡 Orange Day — Community Voice</span>
+    <span><a href="index.html">&larr; Back to Home</a></span>
+  </div>
 
-            <form id="experienceForm">
-                <div class="form-group">
-                    <label for="username">Your Name or Alias (Optional):</label>
-                    <input type="text" id="username" placeholder="Anonymous">
-                </div>
+  <!-- Navegación -->
+  <nav class="main-nav">
+    <div class="school-brand">
+      <img src="escudo.png" alt="Escudo" class="school-badge">
+      <span class="school-name">Escuela Preparatoria Oficial No. 115</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="survey.html">Survey</a>
+      <a href="podcast.html">Podcast</a>
+      <a href="infografia.html">Infographic</a>
+      <a href="experiencias.html" class="active">Share your experience</a>
+    </div>
+  </nav>
 
-                <div class="form-group">
-                    <label for="userExperience">Your Story or Thoughts:</label>
-                    <textarea id="userExperience" placeholder="Write your experience here..." required></textarea>
-                </div>
+  <main class="container">
+    <section class="card">
+      <h1>Share Your Experience</h1>
+      <p style="color: #55483f; line-height: 1.5;">
+        Your voice matters! Use the form below to share your story, reflections, or solidarity messages with our community.
+      </p>
 
-                <button type="submit">Publish Experience</button>
-            </form>
-        </section>
+      <form id="experienceForm">
+        <div class="form-group">
+          <label for="username">Your Name or Alias (Optional):</label>
+          <input type="text" id="username" placeholder="Anonymous">
+        </div>
 
-        <section class="card">
-            <h2>Community Stories & Reflections</h2>
-            <div id="postsContainer"></div>
-        </section>
-    </main>
+        <div class="form-group">
+          <label for="userExperience">Your Story or Thoughts:</label>
+          <textarea id="userExperience" placeholder="Write your experience here..." required></textarea>
+        </div>
 
-    <script>
-        const form = document.getElementById('experienceForm');
-        const postsContainer = document.getElementById('postsContainer');
+        <button type="submit" class="btn-solid">Publish Experience</button>
+        <div id="formStatus" class="status-msg"></div>
+      </form>
+    </section>
 
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem('user_experiences') || '[]');
-            postsContainer.innerHTML = '';
+    <section class="card">
+      <h2>Community Stories & Reflections</h2>
+      <div id="postsContainer">Loading stories...</div>
+    </section>
+  </main>
 
-            if (posts.length === 0) {
-                postsContainer.innerHTML = '<p>No experiences shared yet. Be the first to share your story!</p>';
-                return;
-            }
+  <footer>Escuela Preparatoria Oficial No. 115 — Orange Day Digital Campaign</footer>
 
-            posts.forEach(post => {
-                const postElement = document.createElement('div');
-                postElement.className = 'post';
-                postElement.innerHTML = `
-                    <div class="post-header">
-                        <span class="post-author">${escapeHTML(post.author)}</span>
-                        <span>${post.date}</span>
-                    </div>
-                    <p>${escapeHTML(post.content)}</p>
-                `;
-                postsContainer.appendChild(postElement);
-            });
-        }
+  <script>
+    const form = document.getElementById('experienceForm');
+    const postsContainer = document.getElementById('postsContainer');
+    const formStatus = document.getElementById('formStatus');
 
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
+    function escapeHTML(str) {
+      return (str || '').replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+    async function loadPosts() {
+      const { data: posts, error } = await _supabase
+        .from('experiencias_comunidad')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-            const authorInput = document.getElementById('username').value.trim();
-            const contentInput = document.getElementById('userExperience').value.trim();
+      postsContainer.innerHTML = '';
 
-            const newPost = {
-                author: authorInput !== '' ? authorInput : 'Anonymous',
-                content: contentInput,
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            };
+      if (error || !posts || posts.length === 0) {
+        postsContainer.innerHTML = '<p style="color: #777;">No experiences shared yet. Be the first to share your story!</p>';
+        return;
+      }
 
-            const posts = JSON.parse(localStorage.getItem('user_experiences') || '[]');
-            posts.unshift(newPost);
-            localStorage.setItem('user_experiences', JSON.stringify(posts));
-
-            form.reset();
-            loadPosts();
+      posts.forEach(post => {
+        const dateFormatted = new Date(post.created_at).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
         });
 
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+          <div class="post-header">
+            <span class="post-author">${escapeHTML(post.autor)}</span>
+            <span>${dateFormatted}</span>
+          </div>
+          <p style="margin: 0; line-height: 1.5; color: var(--ink);">${escapeHTML(post.historia)}</p>
+        `;
+        postsContainer.appendChild(postElement);
+      });
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      formStatus.innerText = "Publishing...";
+      formStatus.style.color = "var(--maroon)";
+
+      const authorInput = document.getElementById('username').value.trim();
+      const contentInput = document.getElementById('userExperience').value.trim();
+
+      const author = authorInput !== '' ? authorInput : 'Anonymous';
+
+      const { error } = await _supabase
+        .from('experiencias_comunidad')
+        .insert([{ autor: author, historia: contentInput }]);
+
+      if (error) {
+        formStatus.innerText = "Error saving: " + error.message;
+        formStatus.style.color = "red";
+      } else {
+        formStatus.innerText = "Published successfully!";
+        formStatus.style.color = "green";
+        form.reset();
         loadPosts();
-    </script>
+      }
+    });
+
+    loadPosts();
+  </script>
 </body>
 </html>
