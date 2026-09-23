@@ -36,7 +36,6 @@
   }
   * { box-sizing: border-box; }
 
-  /* Custom Cursors */
   body {
     margin: 0;
     font-family: Inter, sans-serif;
@@ -44,14 +43,9 @@
     background: var(--cream);
     cursor: url('lazo-normal.png'), auto;
   }
-  a, button {
-    cursor: url('lazo-deshecho.png'), pointer;
-  }
-  input, textarea, select {
-    cursor: url('lazo-escribir.png'), text;
-  }
+  a, button { cursor: url('lazo-deshecho.png'), pointer; }
+  input, textarea, select { cursor: url('lazo-escribir.png'), text; }
 
-  /* Utility Top Bar */
   .utility-bar {
     background: var(--maroon);
     color: #fff;
@@ -61,21 +55,10 @@
     align-items: center;
     padding: 10px 24px;
   }
-  .utility-bar a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .utility-bar a:hover {
-    text-decoration: underline;
-  }
-  .utility-bar .u-item {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
+  .utility-bar a { color: #fff; text-decoration: none; font-weight: 600; }
+  .utility-bar a:hover { text-decoration: underline; }
+  .utility-bar .u-item { display: flex; gap: 6px; align-items: center; }
 
-  /* Main Navigation Header */
   nav.main-nav {
     display: flex;
     justify-content: space-between;
@@ -87,43 +70,15 @@
     top: 0;
     z-index: 100;
   }
-  .school-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .school-badge {
-    height: 42px;
-    width: auto;
-    object-fit: contain;
-  }
-  .school-name {
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: var(--maroon);
-    line-height: 1.2;
-  }
+  .school-brand { display: flex; align-items: center; gap: 12px; }
+  .school-badge { height: 42px; width: auto; object-fit: contain; }
+  .school-name { font-weight: 700; font-size: 1.05rem; color: var(--maroon); line-height: 1.2; }
 
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    font-weight: 600;
-    font-size: 0.92rem;
-    color: #55483f;
-  }
-  .nav-links a {
-    color: inherit;
-    text-decoration: none;
-  }
-  .nav-links a:hover, .nav-links a.active {
-    color: var(--maroon);
-  }
+  .nav-links { display: flex; gap: 28px; font-weight: 600; font-size: 0.92rem; color: #55483f; }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover, .nav-links a.active { color: var(--maroon); }
 
-  .auth-slot {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
+  .auth-slot { display: flex; gap: 10px; align-items: center; }
   .btn-outline {
     border: 1.5px solid var(--maroon);
     color: var(--maroon);
@@ -149,263 +104,150 @@
   .btn-solid:hover { background: var(--maroon-dark); }
   .btn-outline:hover { background: #fdf7f1; }
 
-  /* Hero Section with Dynamic Background Slider */
+  /* Hero Section */
   .hero {
     position: relative;
-    min-height: 460px;
+    min-height: 480px;
     display: flex;
     align-items: center;
-    padding: 60px 24px;
+    padding: 40px 24px;
     background: #1a080d;
     overflow: hidden;
   }
-  .hero-bg-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
+  .hero-bg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
   .hero-bg-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center; opacity: 0;
     transition: opacity 1.5s ease-in-out;
   }
-  .hero-bg-slide.active {
-    opacity: 0.38;
-  }
+  .hero-bg-slide.active { opacity: 0.38; }
   .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(180deg, rgba(20, 5, 10, 0.65), rgba(20, 5, 10, 0.85));
     z-index: 2;
   }
   .hero-inner {
-    position: relative;
-    z-index: 3;
-    max-width: 720px;
+    position: relative; z-index: 3; max-width: 1080px; color: #fff; margin: 0 auto; text-align: center; width: 100%;
+  }
+  .eyebrow { font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; color: #f3c9a0; margin-bottom: 8px; }
+  .hero h1 { font-family: 'Source Serif 4', serif; font-size: 2.5rem; line-height: 1.15; margin: 0 0 8px; }
+  .hero p { font-size: 1rem; color: #f1e6dd; margin: 0 auto 16px; max-width: 580px; line-height: 1.4; }
+
+  .live-counter-bar {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(6px);
+    padding: 6px 18px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 0.88rem;
     color: #fff;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-  }
-  .eyebrow {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #f3c9a0;
-    margin-bottom: 12px;
-  }
-  .hero h1 {
-    font-family: 'Source Serif 4', serif;
-    font-size: 2.8rem;
-    line-height: 1.15;
-    margin: 0 0 12px;
-  }
-  .hero p {
-    font-size: 1.1rem;
-    color: #f1e6dd;
-    margin: 0 auto 20px;
-    max-width: 580px;
-    line-height: 1.5;
+    border: 1px solid rgba(255,255,255,0.25);
   }
 
-  /* Custom Search Container inside Hero */
-  .search-container {
-    max-width: 650px;
-    margin: 20px auto 0;
+  .hero-widgets-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .widget-card {
     background: rgba(255, 255, 255, 0.95);
-    padding: 12px;
+    color: var(--ink);
+    padding: 14px;
+    border-radius: 12px;
+    width: 210px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+  }
+  .widget-card h4 { margin: 0 0 8px; font-size: 0.88rem; color: var(--maroon); font-weight: 700; }
+
+  .progress-bar-container { background: #e7d9cd; height: 10px; border-radius: 10px; overflow: hidden; margin: 8px 0; }
+  .progress-fill { background: linear-gradient(90deg, var(--orange), #f39c12); height: 100%; width: 0%; transition: width 0.5s ease; }
+
+  .timer-display {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--maroon);
+    background: #fdf7f1;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+  }
+
+  .search-container {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 12px;
     border-radius: 50px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   }
-  /* Estilos para adaptar el Google CSE */
-  .gsc-control-cse {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
+
+  #flying-names-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+  .flying-name {
+    position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%);
+    background: var(--orange); color: white; padding: 8px 18px; border-radius: 20px; font-weight: bold;
+    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.5); animation: flyUpAndFade 2.5s forwards ease-out;
   }
-  .gsc-search-box {
-    margin-bottom: 0 !important;
-  }
-  td.gsc-search-button {
-    vertical-align: middle;
+  @keyframes flyUpAndFade {
+    0% { opacity: 0; transform: translate(-50%, 20px) scale(0.8); }
+    20% { opacity: 1; transform: translate(-50%, 0) scale(1.1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -180px) scale(1); }
   }
 
-  /* Sections & Cards */
-  .section {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 48px 24px;
-  }
-  .section-head {
-    margin-bottom: 24px;
-  }
-  .section-head .kicker {
-    color: var(--orange-dark);
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-  }
-  .section-head h2 {
-    font-family: 'Source Serif 4', serif;
-    font-size: 1.8rem;
-    margin: 4px 0 0;
-    color: var(--maroon);
-  }
+  .gsc-control-cse { background: transparent !important; border: none !important; padding: 0 !important; }
+  .gsc-search-box { margin-bottom: 0 !important; }
+  td.gsc-search-button { vertical-align: middle; }
 
-  /* Video Player Box */
+  .section { max-width: 1080px; margin: 0 auto; padding: 48px 24px; }
+  .section-head { margin-bottom: 24px; }
+  .section-head .kicker { color: var(--orange-dark); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; }
+  .section-head h2 { font-family: 'Source Serif 4', serif; font-size: 1.8rem; margin: 4px 0 0; color: var(--maroon); }
+
   .video-container {
-    background: #000;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border: 1px solid var(--line);
-    position: relative;
-    padding-top: 56.25%;
+    background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid var(--line); position: relative; padding-top: 56.25%;
   }
-  .video-container video, .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+  .video-container video, .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-  /* Forum & Admin */
-  .forum-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 28px;
-  }
-  textarea {
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 12px;
-    font-family: inherit;
-    resize: vertical;
-    margin-bottom: 12px;
-  }
+  .forum-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 28px; }
+  textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: inherit; resize: vertical; margin-bottom: 12px; }
   textarea:focus, input:focus { outline: 2px solid var(--orange); }
 
   .comment-card {
-    background: #fdf7f1;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
+    background: #fdf7f1; border: 1px solid var(--line); border-radius: 8px; padding: 14px; margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
   }
-  .comment-card .author {
-    color: var(--maroon);
-    font-weight: 700;
-    font-size: 0.88rem;
-    margin: 0 0 4px;
-  }
-  .comment-actions {
-    display: flex;
-    gap: 6px;
-    flex-shrink: 0;
-    align-items: center;
-  }
-  .reaction-btn {
-    background: #fff;
-    border: 1px solid var(--orange);
-    color: var(--orange-dark);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 0.78rem;
-    font-weight: 600;
-  }
+  .comment-card .author { color: var(--maroon); font-weight: 700; font-size: 0.88rem; margin: 0 0 4px; }
+  .comment-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+  .reaction-btn { background: #fff; border: 1px solid var(--orange); color: var(--orange-dark); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; }
   .reaction-btn:hover { background: #fdeee1; }
-  .delete-btn {
-    background: #c0392b;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    font-weight: 600;
-  }
+  .delete-btn { background: #c0392b; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; }
   .delete-btn:hover { background: #a93226; }
 
-  .admin-card {
-    background: #fff;
-    border: 2px solid var(--maroon);
-    border-radius: 12px;
-    padding: 28px;
-  }
+  .admin-card { background: #fff; border: 2px solid var(--maroon); border-radius: 12px; padding: 28px; }
   .admin-card h2 { color: var(--maroon); margin-top: 0; }
 
-  /* Modals */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.55);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55); justify-content: center; align-items: center; z-index: 1000;
   }
   .modal-content {
-    background: #fff;
-    border: 2px solid var(--maroon);
-    border-radius: 12px;
-    padding: 28px;
-    width: 90%;
-    max-width: 440px;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    background: #fff; border: 2px solid var(--maroon); border-radius: 12px; padding: 28px;
+    width: 90%; max-width: 440px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
-  .modal-content h2 {
-    margin-top: 0;
-    color: var(--maroon);
-    font-family: 'Source Serif 4', serif;
-  }
-  .modal-content input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    margin-bottom: 12px;
-  }
-  .close-btn {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    color: #888;
-  }
+  .modal-content h2 { margin-top: 0; color: var(--maroon); font-family: 'Source Serif 4', serif; }
+  .modal-content input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 12px; }
+  .close-btn { position: absolute; top: 12px; right: 16px; font-size: 1.5rem; background: none; border: none; color: #888; }
   .close-btn:hover { color: #000; }
 
-  footer {
-    text-align: center;
-    padding: 28px;
-    color: #8a7a6d;
-    font-size: 0.82rem;
-    border-top: 1px solid var(--line);
-  }
+  footer { text-align: center; padding: 28px; color: #8a7a6d; font-size: 0.82rem; border-top: 1px solid var(--line); }
 </style>
 </head>
 <body>
@@ -429,9 +271,9 @@
       <a href="survey.html">Survey</a>
       <a href="podcast.html">Podcast</a>
       <a href="infografia.html">Infographic</a>
+      <a href="experiencias.html" style="color: var(--orange-dark); font-weight: 700;">Share your experience</a>
     </div>
 
-    <!-- Auth Slot -->
     <div class="auth-slot">
       <div id="auth-buttons" style="display: flex; gap: 8px;">
         <button type="button" class="btn-outline" onclick="openModal('login')">Log In</button>
@@ -446,7 +288,7 @@
     </div>
   </nav>
 
-  <!-- Hero Banner with Dynamic Background Slider & Search Engine -->
+  <!-- Hero Banner -->
   <section class="hero">
     <div class="hero-bg-container">
       <div class="hero-bg-slide active" style="background-image: url('imagen1.png');"></div>
@@ -463,12 +305,36 @@
       <h1>A space to speak, listen, and act.</h1>
       <p>Explore official resources, news, and guides related to Orange Day.</p>
       
-      <!-- Buscador de Google dentro del Hero -->
-      <div class="search-container">
-        <div class="gcse-search"></div>
+      <div class="live-counter-bar">
+        👥 <span id="total-registered">0</span> Registered &nbsp;|&nbsp; 🟢 <span id="online-users">1</span> Online now
+      </div>
+
+      <div class="hero-widgets-grid">
+        <div class="widget-card">
+          <h4>Support Bar 🧡</h4>
+          <div class="progress-bar-container">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <p id="support-count-text" style="font-size:0.75rem; margin: 4px 0 8px; color: #555;">0 supports today</p>
+          <button type="button" class="btn-solid" id="btn-support" onclick="postDailySupport()" style="font-size:0.75rem; padding: 6px 10px; width: 100%;">Support today!</button>
+        </div>
+
+        <div class="search-container">
+          <div class="gcse-search"></div>
+        </div>
+
+        <div class="widget-card">
+          <h4>Next Orange Day 🎗️</h4>
+          <div class="timer-display">
+            <span id="days">00</span>d <span id="hours">00</span>h <span id="minutes">00</span>m <span id="seconds">00</span>s
+          </div>
+          <small style="font-size:0.72rem; color: #777; display:block; margin-top:4px;">25th of every month</small>
+        </div>
       </div>
     </div>
   </section>
+
+  <div id="flying-names-container"></div>
 
   <!-- Video Section -->
   <section class="section">
@@ -498,7 +364,7 @@
     </div>
   </section>
 
-  <!-- Admin Dashboard (Visible only to administrator) -->
+  <!-- Admin Dashboard -->
   <section id="admin-dashboard" class="section" style="display: none;">
     <div class="admin-card">
       <h2>Admin Dashboard</h2>
@@ -529,7 +395,7 @@
     </div>
   </section>
 
-  <!-- Authentication Modal (Log In / Sign Up) -->
+  <!-- Authentication Modal -->
   <div class="modal-overlay" id="account-modal">
     <div class="modal-content">
       <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -558,19 +424,24 @@
 
   <footer>Escuela Preparatoria Oficial No. 115 — Orange Day Digital Campaign</footer>
 
-  <!-- Core JavaScript Logic -->
   <script>
     let isAdmin = false;
     let chartInstance = null;
     let currentHeroIndex = 0;
+    let supportChannel = null;
 
     window.onload = async function() {
       loadComments();
       await restoreSession();
       startHeroBackgroundRotation();
+      
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      initLiveCounters();
+      loadDailySupports();
+      setupRealtimeSupport();
     };
 
-    /* Background Image Carousel for Hero Section */
     function startHeroBackgroundRotation() {
       const slides = document.querySelectorAll('.hero-bg-slide');
       if (slides.length === 0) return;
@@ -582,22 +453,117 @@
       }, 4000);
     }
 
+    function updateCountdown() {
+      const now = new Date();
+      let targetDate = new Date(now.getFullYear(), now.getMonth(), 25);
+      if (now.getDate() > 25) {
+        targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 25);
+      }
+      const diff = targetDate - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('days').innerText = String(days).padStart(2, '0');
+      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    async function initLiveCounters() {
+      const { data: users, count } = await _supabase.from('foro_comentarios').select('user_id', { count: 'exact', head: true });
+      document.getElementById('total-registered').innerText = count || 1;
+
+      const channel = _supabase.channel('online-users');
+      channel
+        .on('presence', { event: 'sync' }, () => {
+          const state = channel.presenceState();
+          const count = Object.keys(state).length;
+          document.getElementById('online-users').innerText = count || 1;
+        })
+        .subscribe(async (status) => {
+          if (status === 'SUBSCRIBED') {
+            await channel.track({ online_at: new Date().toISOString() });
+          }
+        });
+    }
+
+    function setupRealtimeSupport() {
+      supportChannel = _supabase.channel('support-room');
+      supportChannel
+        .on('broadcast', { event: 'fly_name' }, (payload) => {
+          showFlyingName(payload.payload.name);
+          loadDailySupports();
+        })
+        .subscribe();
+    }
+
+    function showFlyingName(name) {
+      const container = document.getElementById('flying-names-container');
+      const el = document.createElement('div');
+      el.className = 'flying-name';
+      el.innerText = `🧡 ${name} just supported!`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 2500);
+    }
+
+    async function loadDailySupports() {
+      const today = new Date().toISOString().split('T')[0];
+      const { count } = await _supabase
+        .from('daily_supports')
+        .select('*', { count: 'exact' })
+        .gte('created_at', `${today}T00:00:00`);
+
+      const total = count || 0;
+      const percentage = Math.min((total / 50) * 100, 100);
+      document.getElementById('progress-fill').style.width = `${percentage}%`;
+      document.getElementById('support-count-text').innerText = `${total} supports today`;
+    }
+
+    async function postDailySupport() {
+      const { data: { user } } = await _supabase.auth.getUser();
+      if (!user) {
+        alert("You must log in to submit your support.");
+        openModal('login');
+        return;
+      }
+
+      const name = user.user_metadata?.display_name || user.user_metadata?.username || "User";
+
+      const { error } = await _supabase.from('daily_supports').insert([
+        { user_id: user.id, user_name: name }
+      ]);
+
+      if (error) {
+        if (error.code === '23505') {
+          alert("You already showed your support today! Come back tomorrow 🧡");
+        } else {
+          alert("Error saving your support: " + error.message);
+        }
+      } else {
+        if (supportChannel) {
+          supportChannel.send({
+            type: 'broadcast',
+            event: 'fly_name',
+            payload: { name: name }
+          });
+        }
+        showFlyingName(name);
+        loadDailySupports();
+      }
+    }
+
     function stringToColor(str) {
       let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const hue = Math.abs(hash) % 360;
-      return `hsl(${hue}, 70%, 50%)`;
+      for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      return `hsl(${Math.abs(hash) % 360}, 70%, 50%)`;
     }
 
     function showUserBadge(name) {
       const badge = document.getElementById('user-badge');
-      const dot = document.getElementById('user-badge-dot');
-      const nameEl = document.getElementById('user-badge-name');
-
-      dot.style.backgroundColor = stringToColor(name);
-      nameEl.innerText = name;
+      document.getElementById('user-badge-dot').style.backgroundColor = stringToColor(name);
+      document.getElementById('user-badge-name').innerText = name;
       badge.style.display = 'flex';
       document.getElementById('auth-buttons').style.display = 'none';
     }
@@ -610,7 +576,6 @@
     async function restoreSession() {
       const { data: { user } } = await _supabase.auth.getUser();
       if (!user) return;
-
       const displayName = user.user_metadata?.display_name || user.user_metadata?.username || "User";
       showUserBadge(displayName);
 
@@ -625,7 +590,6 @@
 
     function openModal(view) {
       document.getElementById('account-modal').style.display = 'flex';
-
       if (view === 'signup') {
         document.getElementById('signup-view').style.display = 'block';
         document.getElementById('login-view').style.display = 'none';
@@ -635,9 +599,7 @@
       }
     }
 
-    function closeModal() {
-      document.getElementById('account-modal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('account-modal').style.display = 'none'; }
 
     async function registerUser() {
       const username = document.getElementById('signup-username').value.trim();
@@ -694,7 +656,6 @@
       } else {
         status.innerText = "Logged in successfully!";
         status.style.color = "green";
-
         const displayName = data.user.user_metadata?.display_name || username;
         showUserBadge(displayName);
 
@@ -853,9 +814,7 @@
 
       const ctx = document.getElementById('graficaResultados').getContext('2d');
 
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
+      if (chartInstance) { chartInstance.destroy(); }
 
       chartInstance = new Chart(ctx, {
         type: 'bar',
@@ -866,19 +825,9 @@
             { label: 'No', data: noData, backgroundColor: '#6f1d33' }
           ]
         },
-        options: {
-          responsive: true,
-          scales: {
-            x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 0 } },
-            y: { beginAtZero: true, ticks: { stepSize: 1 } }
-          },
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
     }
   </script>
-
 </body>
 </html>

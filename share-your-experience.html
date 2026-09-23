@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Experience</title>
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --dark-color: #2b2d42;
+            --light-bg: #f8f9fa;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+        }
+        header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        h1, h2 {
+            color: var(--dark-color);
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #e05624;
+        }
+        .post {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+        .post:last-child {
+            border-bottom: none;
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .post-author {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Awareness Campaign</h2>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="share-your-experience.html">Share Your Experience</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h1>Share Your Experience</h1>
+            <p>Your voice matters! Use the form below to share your story, reflections, or messages with our community.</p>
+
+            <form id="experienceForm">
+                <div class="form-group">
+                    <label for="username">Your Name or Alias (Optional):</label>
+                    <input type="text" id="username" placeholder="Anonymous">
+                </div>
+
+                <div class="form-group">
+                    <label for="userExperience">Your Story or Thoughts:</label>
+                    <textarea id="userExperience" placeholder="Write your experience here..." required></textarea>
+                </div>
+
+                <button type="submit">Publish Experience</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Community Stories & Reflections</h2>
+            <div id="postsContainer"></div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById('experienceForm');
+        const postsContainer = document.getElementById('postsContainer');
+
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('user_experiences') || '[]');
+            postsContainer.innerHTML = '';
+
+            if (posts.length === 0) {
+                postsContainer.innerHTML = '<p>No experiences shared yet. Be the first to share your story!</p>';
+                return;
+            }
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <span class="post-author">${escapeHTML(post.author)}</span>
+                        <span>${post.date}</span>
+                    </div>
+                    <p>${escapeHTML(post.content)}</p>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const authorInput = document.getElementById('username').value.trim();
+            const contentInput = document.getElementById('userExperience').value.trim();
+
+            const newPost = {
+                author: authorInput !== '' ? authorInput : 'Anonymous',
+                content: contentInput,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+
+            const posts = JSON.parse(localStorage.getItem('user_experiences') || '[]');
+            posts.unshift(newPost);
+            localStorage.setItem('user_experiences', JSON.stringify(posts));
+
+            form.reset();
+            loadPosts();
+        });
+
+        loadPosts();
+    </script>
+</body>
+</html>
