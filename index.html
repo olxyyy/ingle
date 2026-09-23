@@ -254,6 +254,74 @@
   .close-btn:hover { color: #000; }
 
   footer { text-align: center; padding: 28px; color: #8a7a6d; font-size: 0.82rem; border-top: 1px solid var(--line); }
+
+  /* Media Queries for Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .utility-bar {
+      flex-direction: column;
+      gap: 6px;
+      text-align: center;
+      padding: 8px 12px;
+    }
+    nav.main-nav {
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px;
+    }
+    .school-brand {
+      flex-direction: column;
+      text-align: center;
+      gap: 6px;
+    }
+    .school-name {
+      font-size: 0.95rem;
+    }
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 16px;
+      font-size: 0.85rem;
+    }
+    .auth-slot {
+      width: 100%;
+      justify-content: center;
+    }
+    .hero {
+      padding: 30px 16px;
+    }
+    .hero h1 {
+      font-size: 1.75rem;
+    }
+    .hero p {
+      font-size: 0.9rem;
+    }
+    .hero-widgets-grid {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .widget-card {
+      width: 100%;
+      max-width: 340px;
+    }
+    .search-container {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .section {
+      padding: 32px 16px;
+    }
+    .forum-card, .admin-card {
+      padding: 18px;
+    }
+    .comment-card {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .comment-actions {
+      align-self: flex-start;
+    }
+  }
 </style>
 </head>
 <body>
@@ -378,7 +446,7 @@
 
       <h3 style="color: var(--maroon); font-size: 1.1rem;">Survey Analytics</h3>
       <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 24px;">
-        <canvas id="graficaResultados" height="100"></canvas>
+        <canvas id="graficaResultados" height="180"></canvas>
       </div>
 
       <h3 style="color: var(--maroon); font-size: 1.1rem; margin-bottom: 12px;">Forum Moderation</h3>
@@ -478,8 +546,10 @@
     }
 
     async function initLiveCounters() {
-      const { data: users, count } = await _supabase.from('foro_comentarios').select('user_id', { count: 'exact', head: true });
-      document.getElementById('total-registered').innerText = count || 1;
+      const { data: userCount, error } = await _supabase.rpc('get_user_count');
+      if (!error && userCount !== null) {
+        document.getElementById('total-registered').innerText = userCount;
+      }
 
       const channel = _supabase.channel('online-users');
       channel
@@ -831,7 +901,10 @@
             { label: 'No', data: noData, backgroundColor: '#6f1d33' }
           ]
         },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
       });
     }
   </script>
