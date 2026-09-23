@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Share Your Experience — Orange Day</title>
 
-  <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Vercel Analytics Script -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -32,6 +29,7 @@
       --cream: #fdf7f1;
       --ink: #2a2420;
       --line: #e7d9cd;
+      --danger: #d9534f;
     }
     * { box-sizing: border-box; }
 
@@ -129,6 +127,20 @@
     .btn-solid:hover {
       background-color: var(--maroon-dark);
     }
+    .btn-delete {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .btn-delete:hover {
+      background: var(--danger);
+      color: white;
+    }
     .post {
       border-bottom: 1px solid var(--line);
       padding: 1.2rem 0;
@@ -157,13 +169,11 @@
 </head>
 <body>
 
-  <!-- Barra superior -->
   <div class="utility-bar">
     <span>🧡 Orange Day — Community Voice</span>
     <span><a href="index.html">&larr; Back to Home</a></span>
   </div>
 
-  <!-- Navegación -->
   <nav class="main-nav">
     <div class="school-brand">
       <img src="escudo.png" alt="Escudo" class="school-badge">
@@ -220,6 +230,16 @@
       );
     }
 
+    function getMyPostIds() {
+      return JSON.parse(localStorage.getItem('my_created_posts') || '[]');
+    }
+
+    function saveMyPostId(id) {
+      const myPosts = getMyPostIds();
+      myPosts.push(id);
+      localStorage.setItem('my_created_posts', JSON.stringify(myPosts));
+    }
+
     async function loadPosts() {
       const { data: posts, error } = await _supabase
         .from('experiencias_comunidad')
@@ -233,10 +253,14 @@
         return;
       }
 
+      const myPostIds = getMyPostIds();
+
       posts.forEach(post => {
         const dateFormatted = new Date(post.created_at).toLocaleDateString('en-US', {
           month: 'short', day: 'numeric', year: 'numeric'
         });
+
+        const isMyPost = myPostIds.includes(post.id);
 
         const postElement = document.createElement('div');
         postElement.className = 'post';
@@ -246,9 +270,27 @@
             <span>${dateFormatted}</span>
           </div>
           <p style="margin: 0; line-height: 1.5; color: var(--ink);">${escapeHTML(post.historia)}</p>
+          ${isMyPost ? `<button class="btn-delete" onclick="deletePost(${post.id})">Delete my post</button>` : ''}
         `;
         postsContainer.appendChild(postElement);
       });
+    }
+
+    async function deletePost(postId) {
+      if (!confirm('Are you sure you want to delete this post?')) return;
+
+      const { error } = await _supabase
+        .from('experiencias_comunidad')
+        .delete()
+        .eq('id', postId);
+
+      if (error) {
+        alert('Could not delete: ' + error.message);
+      } else {
+        const myPosts = getMyPostIds().filter(id => id !== postId);
+        localStorage.setItem('my_created_posts', JSON.stringify(myPosts));
+        loadPosts();
+      }
     }
 
     form.addEventListener('submit', async function(e) {
@@ -258,12 +300,12 @@
 
       const authorInput = document.getElementById('username').value.trim();
       const contentInput = document.getElementById('userExperience').value.trim();
-
       const author = authorInput !== '' ? authorInput : 'Anonymous';
 
-      const { error } = await _supabase
+      const { data, error } = await _supabase
         .from('experiencias_comunidad')
-        .insert([{ autor: author, historia: contentInput }]);
+        .insert([{ autor: author, historia: contentInput }])
+        .select();
 
       if (error) {
         formStatus.innerText = "Error saving: " + error.message;
@@ -271,6 +313,9 @@
       } else {
         formStatus.innerText = "Published successfully!";
         formStatus.style.color = "green";
+        if (data && data[0]) {
+          saveMyPostId(data[0].id);
+        }
         form.reset();
         loadPosts();
       }
