@@ -2,17 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>About Us - Orange Day Campaign</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background-color: #fce1d0;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
+    :root {
+      --maroon: #6f1d33;
+      --maroon-dark: #571626;
+      --orange: #e67e22;
+      --orange-dark: #d35400;
+      --cream: #fdf7f1;
+      --cream-card: #ffffff;
+      --cream-subtle: #f9ede2;
+      --ink: #2a2420;
+      --muted: #7a6a5d;
+      --line: #e7d9cd;
+      --shadow: 0 10px 25px -5px rgba(111, 29, 51, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
       box-sizing: border-box;
-      color: #333;
+    }
+
+    body {
+      background-color: var(--cream);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 24px 16px;
+      box-sizing: border-box;
+      color: var(--ink);
       cursor: url('lazo-normal.png'), auto;
+      line-height: 1.6;
     }
 
     a, button, .ig-post, .ig-avatar {
@@ -27,18 +50,22 @@
     }
 
     .back-btn {
-      background-color: #ffffff;
-      border: 1.5px solid #e67e22;
-      padding: 8px 16px;
+      background-color: var(--cream-card);
+      border: 1.5px solid var(--orange);
+      padding: 8px 18px;
       border-radius: 20px;
-      color: #d35400;
-      font-weight: bold;
+      color: var(--orange-dark);
+      font-weight: 700;
       text-decoration: none;
       font-size: 0.9rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
     }
 
     .back-btn:hover {
-      background-color: #ffe6d5;
+      background-color: var(--cream-subtle);
+      transform: translateY(-1px);
     }
 
     .main-container {
@@ -46,35 +73,39 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 24px;
     }
 
     .box {
-      background-color: #ffffff;
-      border: 2px dashed #e67e22;
-      border-radius: 12px;
+      background-color: var(--cream-card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow);
     }
 
     .about-header h1 {
-      color: #d35400;
+      color: var(--maroon);
+      font-family: 'Source Serif 4', Georgia, serif;
       margin-top: 0;
       font-size: 2.2rem;
     }
 
     .about-header p {
       line-height: 1.7;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: #444;
     }
 
     .highlight-box {
-      background-color: #fff3e6;
-      border-left: 4px solid #e67e22;
-      padding: 15px;
-      margin: 20px 0;
+      background-color: var(--cream-subtle);
+      border-left: 4px solid var(--orange);
+      padding: 16px 20px;
+      margin: 24px 0;
       font-style: italic;
+      border-radius: 0 8px 8px 0;
+      font-size: 1.05rem;
+      color: var(--maroon);
     }
 
     .video-section {
@@ -82,17 +113,21 @@
     }
 
     .video-section h2 {
-      color: #d35400;
+      color: var(--maroon);
+      font-family: 'Source Serif 4', Georgia, serif;
       margin-top: 0;
+      font-size: 1.8rem;
     }
 
     .video-wrapper {
       width: 100%;
       max-width: 700px;
-      margin: 15px auto 0 auto;
-      border-radius: 8px;
+      margin: 18px auto 0 auto;
+      border-radius: 12px;
       overflow: hidden;
-      border: 2px solid #e67e22;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: #000;
     }
 
     video {
@@ -101,26 +136,27 @@
     }
 
     .ig-container {
-      background-color: #ffffff;
-      border: 1px solid #dbdbdb;
-      border-radius: 8px;
-      padding: 20px;
+      background-color: var(--cream-card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
     }
 
     .ig-header-title {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #8e8e8e;
-      margin-bottom: 15px;
-      font-weight: bold;
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-weight: 700;
     }
 
     .ig-profile {
       display: flex;
       align-items: center;
-      gap: 30px;
-      border-bottom: 1px solid #efefef;
+      gap: 28px;
+      border-bottom: 1px solid var(--line);
       padding-bottom: 20px;
       margin-bottom: 20px;
     }
@@ -129,10 +165,11 @@
       width: 90px;
       height: 90px;
       border-radius: 50%;
-      border: 2px solid #e67e22;
+      border: 2px solid var(--orange);
       padding: 2px;
       object-fit: cover;
       transition: transform 0.2s;
+      flex-shrink: 0;
     }
 
     .ig-avatar:hover {
@@ -140,9 +177,9 @@
     }
 
     .ig-info h2 {
-      margin: 0 0 5px 0;
-      font-size: 1.4rem;
-      color: #262626;
+      margin: 0 0 6px 0;
+      font-size: 1.35rem;
+      color: var(--ink);
     }
 
     .ig-stats {
@@ -154,21 +191,21 @@
 
     .ig-bio {
       font-size: 0.95rem;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .ig-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
     .ig-post {
       position: relative;
       aspect-ratio: 1 / 1;
-      background-color: #fafafa;
-      border: 1px solid #eee;
-      border-radius: 4px;
+      background-color: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 8px;
       overflow: hidden;
     }
 
@@ -176,6 +213,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .ig-post:hover img {
+      transform: scale(1.04);
     }
 
     .modal-overlay {
@@ -184,7 +226,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
+      background-color: rgba(42, 36, 32, 0.85);
+      backdrop-filter: blur(4px);
       display: none;
       justify-content: center;
       align-items: center;
@@ -192,17 +235,64 @@
     }
 
     .modal-overlay img {
-      max-width: 80%;
+      max-width: 85%;
       max-height: 80vh;
       border-radius: 12px;
-      border: 3px solid #e67e22;
+      border: 2px solid var(--orange);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
     footer {
       text-align: center;
-      margin-top: 25px;
-      color: #b3541e;
-      font-size: 0.85rem;
+      margin-top: 36px;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--line);
+    }
+
+    /* Adaptación para Celulares */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px 12px;
+      }
+
+      .box, .ig-container {
+        padding: 20px 16px;
+        border-radius: 12px;
+      }
+
+      .about-header h1 {
+        font-size: 1.75rem;
+      }
+
+      .about-header p {
+        font-size: 0.95rem;
+      }
+
+      .video-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .ig-profile {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+      }
+
+      .ig-stats {
+        justify-content: center;
+        gap: 16px;
+        font-size: 0.88rem;
+      }
+
+      .ig-bio {
+        font-size: 0.88rem;
+      }
+
+      .ig-grid {
+        gap: 8px;
+      }
     }
   </style>
 </head>
@@ -231,7 +321,7 @@
 
     <div class="box video-section">
       <h2>Orange Day Documentary</h2>
-      <p>Watch this video to learn more about the history and impact of the global movement.</p>
+      <p style="color: var(--muted); font-size: 0.95rem;">Watch this video to learn more about the history and impact of the global movement.</p>
       <div class="video-wrapper">
         <video controls poster="portada_video.png">
           <source src="documental.mp4" type="video/mp4">
