@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -529,14 +529,17 @@
 
     function updateCountdown() {
       const now = new Date();
-      let targetDate = new Date(now.getFullYear(), now.getMonth(), 25);
-      if (now.getDate() > 25) {
-        targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 25);
+      let targetDate = new Date(now.getFullYear(), now.getMonth(), 25, 0, 0, 0);
+
+      if (now >= targetDate) {
+        targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 25, 0, 0, 0);
       }
+
       const diff = targetDate - now;
+
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
       document.getElementById('days').innerText = String(days).padStart(2, '0');
@@ -865,48 +868,9 @@
         .delete()
         .eq('id', id);
 
-      if (error) {
-        alert("Error deleting comment: " + error.message);
-      } else {
-        loadComments();
-      }
-    }
-
-    async function loadChart() {
-      const { data, error } = await _supabase.from('respuestas_cuestionario').select('pregunta, respuesta');
-      if (error) return;
-
-      const questionMap = {};
-      data.forEach(row => {
-        const q = row.pregunta || "General";
-        if (!questionMap[q]) questionMap[q] = { yes: 0, no: 0 };
-        if (row.respuesta === 'Yes' || row.respuesta === 'Sí') questionMap[q].yes++;
-        else questionMap[q].no++;
-      });
-
-      const labels = Object.keys(questionMap);
-      const yesData = labels.map(q => questionMap[q].yes);
-      const noData = labels.map(q => questionMap[q].no);
-
-      const ctx = document.getElementById('graficaResultados').getContext('2d');
-
-      if (chartInstance) { chartInstance.destroy(); }
-
-      chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Yes', data: yesData, backgroundColor: '#e67e22' },
-            { label: 'No', data: noData, backgroundColor: '#6f1d33' }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false
-        }
-      });
+      if (!error) loadComments();
     }
   </script>
+
 </body>
 </html>
